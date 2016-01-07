@@ -1,1 +1,4 @@
 # azurectl
+```
+azurectl -h
+```
