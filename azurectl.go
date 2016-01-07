@@ -48,6 +48,7 @@ type Group struct {
 	MailNickname    string `json:"mailNickname"`
 	MailEnabled     bool   `json:"mailEnabled"`
 	SecurityEnabled bool   `json:"securityEnabled"`
+	Description     string `json:"description"`
 }
 
 func main() {
@@ -96,6 +97,12 @@ var Commands = []cli.Command{
 				Description: "",
 				Action:      createGroup,
 				ArgsUsage:   "<name>",
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "description, d",
+						Usage: "Description of the group",
+					},
+				},
 			},
 			{
 				Name:        "delete",
@@ -280,12 +287,14 @@ func createGroup(c *cli.Context) {
 	displayName := c.Args()[0]
 	mailNickname := strings.TrimPrefix(displayName, ".")
 	credentials := readCredentials()
+	description := c.String("description")
 
 	var group Group
 	group.DisplayName = displayName
 	group.MailNickname = mailNickname
 	group.MailEnabled = false
 	group.SecurityEnabled = true
+	group.Description = description
 	groupJSON, err := json.Marshal(group)
 	check(err)
 
